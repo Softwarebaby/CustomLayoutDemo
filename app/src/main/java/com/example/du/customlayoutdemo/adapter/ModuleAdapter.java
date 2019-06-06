@@ -47,7 +47,7 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder
         viewHolder.moduleTitle.setText(moduleItem.getModuleTitle());
         String layoutCode = moduleItem.getLayoutCode();
         View contentView = null;
-        if (layoutCode.equals("layout_custom")) {
+        if (layoutCode.split("_")[1].equals("custom")) {
             contentView = new NewTVCustomLayout(mContext);
             //不配置LayoutParams默认是wrap_content
 //            FrameLayout.LayoutParams layoutParams = new NewTVCustomLayout.LayoutParams(400, 300).build();
