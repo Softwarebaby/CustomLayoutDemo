@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         ModuleItem moduleItem1 = getStateModuleItem("layout_1", "测试静态布局1", 2);
         ModuleItem moduleItem2 = getStateModuleItem("layout_2", "测试静态布局2", 4);
 
-        ModuleItem moduleItem3 = new ModuleItem("layout_custom", "测试动态布局1");
+        ModuleItem moduleItem3 = new ModuleItem("layout_custom_1", "测试动态布局1");
         List<ProgramInfo> programInfos1 = new ArrayList<>();
         ProgramInfo programInfo1 = new ProgramInfo(400, 200, 0, 0, "1");
         ProgramInfo programInfo2 = new ProgramInfo(400, 200, 450, 0, "2");
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         programInfos1.add(programInfo3);
         moduleItem3.setProgramInfos(programInfos1);
 
-        ModuleItem moduleItem4 = new ModuleItem("layout_custom", "测试动态布局2");
+        ModuleItem moduleItem4 = new ModuleItem("layout_custom_2", "测试动态布局2");
         List<ProgramInfo> programInfos2 = new ArrayList<>();
         ProgramInfo programInfo11 = new ProgramInfo(400, 200, 100, 0, "1");
         ProgramInfo programInfo12 = new ProgramInfo(400, 200, 550, 0, "2");
@@ -54,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
         programInfos2.add(programInfo15);
         moduleItem4.setProgramInfos(programInfos2);
 
-        ModuleItem moduleItem5 = new ModuleItem("layout_custom", "测试动态布局3");
+        ModuleItem moduleItem5 = new ModuleItem("layout_custom_3", "测试动态布局3");
         List<ProgramInfo> programInfos3 = new ArrayList<>();
-        ProgramInfo programInfo21 = new ProgramInfo(400, 400, 200, 50, "1");
+        ProgramInfo programInfo21 = new ProgramInfo(400, 400, 200, 0, "1");
         ProgramInfo programInfo22 = new ProgramInfo(200, 200, 700, 100, "2");
         programInfos3.add(programInfo21);
         programInfos3.add(programInfo22);

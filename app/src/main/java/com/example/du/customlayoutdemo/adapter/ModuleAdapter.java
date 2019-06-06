@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.du.customlayoutdemo.R;
 import com.example.du.customlayoutdemo.custom.NewTVCustomLayout;
-import com.example.du.customlayoutdemo.manager.CustomLayoutManager;
+import com.example.du.customlayoutdemo.convert.CustomLayoutConvert;
 import com.example.du.customlayoutdemo.manager.ModuleLayoutManager;
 import com.example.du.customlayoutdemo.model.ModuleItem;
 import com.example.du.customlayoutdemo.model.ProgramInfo;
@@ -51,8 +51,10 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder
             contentView = new NewTVCustomLayout(mContext);
             //不配置LayoutParams默认是wrap_content
 //            FrameLayout.LayoutParams layoutParams = new NewTVCustomLayout.LayoutParams(400, 300).build();
-            List<View> childrenViews = CustomLayoutManager.getInstance(mContext, viewHolder.moduleContent)
-                    .transform("ProgramInfo", moduleItem.getProgramInfos());
+            List<View> childrenViews = CustomLayoutConvert.getInstance(mContext, viewHolder.moduleContent)
+                    .convert("ProgramInfo", layoutCode, moduleItem.getProgramInfos());
+            //注册首行Cell (要求设置首行的y必须为0)
+            ModuleLayoutManager.getInstance().setModuleFirstLineByViews(layoutCode, childrenViews);
             ((NewTVCustomLayout) contentView).addViewList(childrenViews);
 //            contentView.setLayoutParams(layoutParams);
         } else {

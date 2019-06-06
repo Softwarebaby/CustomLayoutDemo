@@ -1,4 +1,4 @@
-package com.example.du.customlayoutdemo.manager;
+package com.example.du.customlayoutdemo.convert;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,36 +13,43 @@ import com.example.du.customlayoutdemo.model.ProgramInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomLayoutManager {
-    private static CustomLayoutManager INSTANCE;
+public class CustomLayoutConvert {
+    private static CustomLayoutConvert INSTANCE;
     private List<View> childrenViews = null;
     private Context mContext;
     private ViewGroup mParent;
+    private String mLayoutId;
 
-    private static List<ProgramInfo> programInfos;
+    private List<ProgramInfo> programInfos;
 
-    private CustomLayoutManager(Context context, ViewGroup parent) {
+    private CustomLayoutConvert(Context context, ViewGroup parent) {
         mContext = context;
         mParent = parent;
     }
 
-    public static CustomLayoutManager getInstance(Context context, ViewGroup parent) {
+    public static CustomLayoutConvert getInstance(Context context, ViewGroup parent) {
         if (INSTANCE == null) {
-            INSTANCE = new CustomLayoutManager(context, parent);
+            INSTANCE = new CustomLayoutConvert(context, parent);
         }
         return INSTANCE;
     }
 
-    public <T>List<View> transform(String beanName, List<T> list) {
+    public <T>List<View> convert(String beanName, String layoutCode, List<T> list) {
       if (beanName.equals("ProgramInfo")) {
           programInfos = (List<ProgramInfo>) list;
+          mLayoutId = getLayoutId(layoutCode);
           childrenViews = getProgramInfoViews();
       }
       return childrenViews;
     }
 
+    private String getLayoutId(String layoutCode) {
+        return layoutCode.substring(layoutCode.indexOf("_") + 1);
+    }
+
     private List<View> getProgramInfoViews() {
         List<View> programInfoViews = new ArrayList<>();
+        int index = 1;
         for (ProgramInfo programInfo : programInfos) {
             FrameLayout view = (FrameLayout) LayoutInflater.from(mContext).inflate(R.layout.item_program_info, mParent, false);
             TextView programContent = view.findViewById(R.id.program_content);
@@ -53,6 +60,7 @@ public class CustomLayoutManager {
             params.leftMargin = programInfo.getX();
             params.topMargin = programInfo.getY();
             view.setLayoutParams(params);
+            view.setTag("cell_" + mLayoutId + (index++));
             programInfoViews.add(view);
         }
         return programInfoViews;

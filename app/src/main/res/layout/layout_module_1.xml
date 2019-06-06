@@ -11,7 +11,8 @@
         android:layout_width="400dp"
         android:layout_height="500dp"
         android:clickable="true"
-        android:focusable="true" />
+        android:focusable="true"
+        android:tag="cell_1_1" />
 
     <FrameLayout
         android:id="@+id/cell_2"
@@ -19,5 +20,6 @@
         android:layout_height="500dp"
         android:layout_marginLeft="200dp"
         android:clickable="true"
-        android:focusable="true" />
+        android:focusable="true"
+        android:tag="cell_1_2" />
 </LinearLayout>
