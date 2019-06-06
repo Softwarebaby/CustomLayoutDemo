@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
         ModuleItem moduleItem3 = new ModuleItem("layout_custom_1", "测试动态布局1");
         List<ProgramInfo> programInfos1 = new ArrayList<>();
-        ProgramInfo programInfo1 = new ProgramInfo(400, 200, 0, 0, "1");
-        ProgramInfo programInfo2 = new ProgramInfo(400, 200, 450, 0, "2");
-        ProgramInfo programInfo3 = new ProgramInfo(400, 200, 900, 0, "3");
+        ProgramInfo programInfo1 = new ProgramInfo("cell_0_1_1", 400, 200, 0, 0, "1");
+        ProgramInfo programInfo2 = new ProgramInfo("cell_0_1_2", 400, 200, 450, 0, "2");
+        ProgramInfo programInfo3 = new ProgramInfo("cell_0_1_3", 400, 200, 900, 0, "3");
         programInfos1.add(programInfo1);
         programInfos1.add(programInfo2);
         programInfos1.add(programInfo3);
@@ -42,11 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
         ModuleItem moduleItem4 = new ModuleItem("layout_custom_2", "测试动态布局2");
         List<ProgramInfo> programInfos2 = new ArrayList<>();
-        ProgramInfo programInfo11 = new ProgramInfo(400, 200, 100, 0, "1");
-        ProgramInfo programInfo12 = new ProgramInfo(400, 200, 550, 0, "2");
-        ProgramInfo programInfo13 = new ProgramInfo(400, 200, 1000, 0, "3");
-        ProgramInfo programInfo14 = new ProgramInfo(600, 200, 100, 250, "4");
-        ProgramInfo programInfo15 = new ProgramInfo(600, 200, 750, 250, "5");
+        ProgramInfo programInfo11 = new ProgramInfo("cell_0_2_1", 400, 200, 100, 0, "1");
+        ProgramInfo programInfo12 = new ProgramInfo("cell_0_2_2", 400, 200, 550, 0, "2");
+        ProgramInfo programInfo13 = new ProgramInfo("cell_0_2_3", 400, 200, 1000, 0, "3");
+        ProgramInfo programInfo14 = new ProgramInfo("cell_0_2_4", 600, 200, 100, 250, "4");
+        ProgramInfo programInfo15 = new ProgramInfo("cell_0_2_5", 600, 200, 750, 250, "5");
         programInfos2.add(programInfo11);
         programInfos2.add(programInfo12);
         programInfos2.add(programInfo13);
@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
         ModuleItem moduleItem5 = new ModuleItem("layout_custom_3", "测试动态布局3");
         List<ProgramInfo> programInfos3 = new ArrayList<>();
-        ProgramInfo programInfo21 = new ProgramInfo(400, 400, 200, 0, "1");
-        ProgramInfo programInfo22 = new ProgramInfo(200, 200, 700, 100, "2");
+        ProgramInfo programInfo21 = new ProgramInfo("cell_0_3_1", 400, 400, 200, 0, "1");
+        ProgramInfo programInfo22 = new ProgramInfo("cell_0_3_2",200, 200, 700, 100, "2");
         programInfos3.add(programInfo21);
         programInfos3.add(programInfo22);
         moduleItem5.setProgramInfos(programInfos3);
@@ -81,9 +81,11 @@ public class MainActivity extends AppCompatActivity {
     private ModuleItem getStateModuleItem(String layoutCode, String moduleTitle, int count) {
         ModuleItem moduleItem = new ModuleItem(layoutCode, moduleTitle);
         List<ProgramInfo> programInfos = new ArrayList<>();
+        String moduleId = layoutCode.substring(layoutCode.indexOf("_") + 1);
         int index = 1;
         while (index <= count) {
-            ProgramInfo programInfo = new ProgramInfo(String.valueOf(index));
+            String cellCode = "cell_" + moduleId + "_" +index;
+            ProgramInfo programInfo = new ProgramInfo(cellCode, String.valueOf(index));
             programInfos.add(programInfo);
             index++;
         }

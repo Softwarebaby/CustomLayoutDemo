@@ -1,6 +1,7 @@
 package com.example.du.customlayoutdemo.model;
 
 public class ProgramInfo {
+    private String cellCode;
     private int width;
     private int height;
     private int x;
@@ -9,16 +10,26 @@ public class ProgramInfo {
 
     public ProgramInfo() {}
 
-    public ProgramInfo(String content) {
+    public ProgramInfo(String cellCode, String content) {
+        this.cellCode = cellCode;
         this.content = content;
     }
 
-    public ProgramInfo(int width, int height, int x, int y, String content) {
+    public ProgramInfo(String cellCode, int width, int height, int x, int y, String content) {
+        this.cellCode = cellCode;
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
         this.content = content;
+    }
+
+    public void setCellCode(String cellCode) {
+        this.cellCode = cellCode;
+    }
+
+    public String getCellCode() {
+        return cellCode;
     }
 
     public void setWidth(int width) {

@@ -44,7 +44,7 @@ public class CustomLayoutConvert {
     }
 
     private String getLayoutId(String layoutCode) {
-        return layoutCode.substring(layoutCode.indexOf("_") + 1);
+        return layoutCode.split("_")[2];
     }
 
     private List<View> getProgramInfoViews() {
@@ -60,7 +60,7 @@ public class CustomLayoutConvert {
             params.leftMargin = programInfo.getX();
             params.topMargin = programInfo.getY();
             view.setLayoutParams(params);
-            view.setTag("cell_" + mLayoutId + (index++));
+            view.setTag("cell_" + 0 + "_" + mLayoutId + (index++));
             programInfoViews.add(view);
         }
         return programInfoViews;

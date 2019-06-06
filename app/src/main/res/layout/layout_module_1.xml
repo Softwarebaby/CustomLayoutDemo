@@ -3,23 +3,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center">
+    android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/cell_1"
-        android:layout_width="400dp"
-        android:layout_height="500dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:tag="cell_1_1" />
+    <include layout="@layout/layout_default_title" />
 
-    <FrameLayout
-        android:id="@+id/cell_2"
-        android:layout_width="400dp"
-        android:layout_height="500dp"
-        android:layout_marginLeft="200dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:tag="cell_1_2" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <FrameLayout
+            android:id="@+id/cell_1_1"
+            android:layout_width="400dp"
+            android:layout_height="500dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:tag="cell_1_1" />
+
+        <FrameLayout
+            android:id="@+id/cell_1_2"
+            android:layout_width="400dp"
+            android:layout_height="500dp"
+            android:layout_marginLeft="200dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:tag="cell_1_2" />
+    </LinearLayout>
+
 </LinearLayout>

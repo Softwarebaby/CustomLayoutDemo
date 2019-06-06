@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class NewTVCustomLayout extends FrameLayout {
     private Context mContext;
-    private List<View> childViewList;
+    private List<View> mChildViewList;
     private boolean isChildFocusable = true;
     private boolean isChildClickable = true;
 
@@ -50,7 +51,7 @@ public class NewTVCustomLayout extends FrameLayout {
     }
 
     public void addViewList(List<View> views) {
-        childViewList = views;
+        mChildViewList = views;
         for (View view : views) {
             view.setFocusable(isChildFocusable);
             view.setClickable(isChildClickable);
@@ -59,8 +60,8 @@ public class NewTVCustomLayout extends FrameLayout {
     }
 
     public void removeAllFocus() {
-        if (childViewList != null) {
-            for (View view : childViewList) {
+        if (mChildViewList != null) {
+            for (View view : mChildViewList) {
                 view.setFocusable(false);
             }
             isChildFocusable = false;
@@ -68,8 +69,8 @@ public class NewTVCustomLayout extends FrameLayout {
     }
 
     public void removeAllClick() {
-        if (childViewList != null) {
-            for (View view : childViewList) {
+        if (mChildViewList != null) {
+            for (View view : mChildViewList) {
                 view.setClickable(false);
             }
             isChildClickable = true;

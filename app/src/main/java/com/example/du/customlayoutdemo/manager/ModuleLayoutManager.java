@@ -13,19 +13,19 @@ import java.util.Map;
 
 public class ModuleLayoutManager {
     private static ModuleLayoutManager INSTANCE;
-    private Map<String, Integer> mLayoutMap;
+    private Map<Integer, Integer> mViewTypeAndLayoutResMap;
     private Map<String, List<String>> mModulesFirstLine;
     private String[] layoutIds = new String[] {"layout_1", "layout_2"};
     private int[] layoutResIds = new int[] {R.layout.layout_module_1, R.layout.layout_module_2};
 
     private ModuleLayoutManager() {
-        if (mLayoutMap == null) {
-            mLayoutMap = new HashMap<>();
+        if (mViewTypeAndLayoutResMap == null) {
+            mViewTypeAndLayoutResMap = new HashMap<>();
         }
         if (mModulesFirstLine == null) {
             mModulesFirstLine = new HashMap<>();
         }
-        registerLayout();
+        registerAllLayoutRes();
         setModulesFirstLine();
     }
 
@@ -36,12 +36,26 @@ public class ModuleLayoutManager {
         return INSTANCE;
     }
 
-    public int getLayoutResId(String layoutCode) {
-        int layoutResId = layoutResIds[0];
-        if (mLayoutMap.containsKey(layoutCode)) {
-            layoutResId = mLayoutMap.get(layoutCode);
+    public int getViewType(String layoutCode) {
+        int viewType;
+        //自定义布局的viewType取负值
+        if (layoutCode.split("_")[1].equals("custom")) {
+            int customId = Integer.parseInt(layoutCode.split("_")[2]);
+            viewType = 0 - customId;
+        } else {
+            viewType = Integer.parseInt(layoutCode.substring(layoutCode.indexOf("_") + 1));
         }
-        return layoutResId;
+        return viewType;
+    }
+
+    public int getLayoutResByViewType(int viewType) {
+        int result = layoutResIds[0];
+        if (mViewTypeAndLayoutResMap != null) {
+            if (mViewTypeAndLayoutResMap.containsKey(viewType) && mViewTypeAndLayoutResMap.get(viewType) != null) {
+                result = mViewTypeAndLayoutResMap.get(viewType);
+            }
+        }
+        return result;
     }
 
     public void setModuleFirstLine(String layoutId, List<String> firstLineCellCodes) {
@@ -75,15 +89,15 @@ public class ModuleLayoutManager {
         return false;
     }
 
-    private void registerLayout() {
-        int size = layoutIds.length;
-        int i = 0;
-        while (i < size) {
-            String key = layoutIds[i];
-            int value = layoutResIds[i];
-            mLayoutMap.put(key, value);
-            i++;
+    private void registerAllLayoutRes() {
+        for (int i = 0; i < layoutIds.length; i++) {
+            int viewType = getViewType(layoutIds[i]);
+            registerLayoutResByViewType(viewType, layoutResIds[i]);
         }
+    }
+
+    private void registerLayoutResByViewType(int viewType, int layoutResId) {
+        mViewTypeAndLayoutResMap.put(viewType, layoutResId);
     }
 
     private void setModulesFirstLine() {

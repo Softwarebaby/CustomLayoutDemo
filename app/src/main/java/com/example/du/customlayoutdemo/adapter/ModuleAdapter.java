@@ -1,6 +1,8 @@
 package com.example.du.customlayoutdemo.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +19,12 @@ import com.example.du.customlayoutdemo.manager.ModuleLayoutManager;
 import com.example.du.customlayoutdemo.model.ModuleItem;
 import com.example.du.customlayoutdemo.model.ProgramInfo;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder> {
+    private static final String TAG = "ModuleAdapter";
     private Context mContext;
     private List<ModuleItem> mModuleList;
     private ModuleLayoutManager moduleLayoutManager;
@@ -31,48 +36,51 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder
 
     @NonNull
     @Override
-    public ModuleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ModuleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(mContext == null) {
-            mContext = viewGroup.getContext();
+            mContext = parent.getContext();
         }
-        View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_module, viewGroup, false);
-        final ViewHolder holder = new ViewHolder(view);
-        return holder;
+        View view;
+        if (viewType > 0) {  //静态布局
+            Log.d(TAG, "viewType: " + viewType);
+            int layoutResId = moduleLayoutManager.getLayoutResByViewType(viewType);
+            view = LayoutInflater.from(mContext).inflate(layoutResId, parent, false);
+        } else {  //动态布局
+            view = new NewTVCustomLayout(mContext);
+        }
+        final ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ModuleAdapter.ViewHolder viewHolder, int i) {
         ModuleItem moduleItem = mModuleList.get(i);
-        viewHolder.moduleTitle.setText(moduleItem.getModuleTitle());
+//        TextView moduleTitle = (TextView) viewHolder.getViewByTag("module_title_text");
+//        moduleTitle.setText(moduleItem.getModuleTitle());
         String layoutCode = moduleItem.getLayoutCode();
-        View contentView = null;
         if (layoutCode.split("_")[1].equals("custom")) {
-            contentView = new NewTVCustomLayout(mContext);
             //不配置LayoutParams默认是wrap_content
 //            FrameLayout.LayoutParams layoutParams = new NewTVCustomLayout.LayoutParams(400, 300).build();
-            List<View> childrenViews = CustomLayoutConvert.getInstance(mContext, viewHolder.moduleContent)
-                    .convert("ProgramInfo", layoutCode, moduleItem.getProgramInfos());
+//            ViewGroup parent = (ViewGroup) viewHolder.itemView.getParent();
+//            List<View> childrenViews = CustomLayoutConvert.getInstance(mContext, parent)
+//                    .convert("ProgramInfo", layoutCode, moduleItem.getProgramInfos());
             //注册首行Cell (要求设置首行的y必须为0)
-            ModuleLayoutManager.getInstance().setModuleFirstLineByViews(layoutCode, childrenViews);
-            ((NewTVCustomLayout) contentView).addViewList(childrenViews);
+//            moduleLayoutManager.setModuleFirstLineByViews(layoutCode, childrenViews);
+//            ((NewTVCustomLayout) viewHolder.itemView).addViewList(childrenViews);
 //            contentView.setLayoutParams(layoutParams);
         } else {
-            int layoutResId = moduleLayoutManager.getLayoutResId(layoutCode);
-            contentView = LayoutInflater.from(mContext).inflate(layoutResId, viewHolder.moduleContent, false);
             List<ProgramInfo> programInfos = moduleItem.getProgramInfos();
             for (int j = 0; j< programInfos.size(); j++) {
-                String content = programInfos.get(j).getContent();
-                String cellName = "cell_" + (j+1);
-                int cellId = mContext.getResources().getIdentifier(cellName, "id", "com.example.du.customlayoutdemo");
-                FrameLayout cell = contentView.findViewById(cellId);
+                String cellCode = programInfos.get(j).getCellCode();
+                String cellContent = programInfos.get(j).getContent();
+                Log.d(TAG, "cellCode: " + cellCode);
+                FrameLayout cell = (FrameLayout) viewHolder.getViewByTag(cellCode);
                 View view = LayoutInflater.from(mContext).inflate(R.layout.item_program_info, cell, false);
                 TextView contentText = view.findViewById(R.id.program_content);
-                contentText.setText(content);
+                contentText.setText(cellContent);
                 cell.addView(view);
             }
         }
-        viewHolder.moduleContent.addView(contentView);
     }
 
     @Override
@@ -80,14 +88,38 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder
         return mModuleList.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        ModuleItem moduleItem = mModuleList.get(position);
+        if (moduleItem != null) {
+            String layoutCode = moduleItem.getLayoutCode();
+            if (layoutCode != null) {
+                return moduleLayoutManager.getViewType(layoutCode);
+            }
+        }
+        return super.getItemViewType(position);
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
-       TextView moduleTitle;
-       FrameLayout moduleContent;
+        protected View mView;
+        protected Map<String, View> mTagAndViewMap;  //缓存组件
 
         public ViewHolder(View view) {
             super(view);
-            moduleTitle = view.findViewById(R.id.module_title);
-            moduleContent = view.findViewById(R.id.module_content);
+            mView = view;
+            mTagAndViewMap = new HashMap<>();
+        }
+
+        public View getViewByTag(String tag) {
+            View targetView = null;
+            if (!TextUtils.isEmpty(tag)) {
+                targetView = mTagAndViewMap.get(tag);
+                if (targetView == null) {
+                    targetView = mView.findViewWithTag(tag);
+                    mTagAndViewMap.put(tag, targetView);
+                }
+            }
+            return targetView;
         }
     }
 }
