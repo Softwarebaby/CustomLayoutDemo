@@ -12,6 +12,7 @@ import java.util.List;
 
 public class NewTVCustomLayout extends FrameLayout {
     private Context mContext;
+    private List<View> childViewList;
     private boolean isChildFocusable = true;
     private boolean isChildClickable = true;
 
@@ -49,10 +50,29 @@ public class NewTVCustomLayout extends FrameLayout {
     }
 
     public void addViewList(List<View> views) {
+        childViewList = views;
         for (View view : views) {
             view.setFocusable(isChildFocusable);
             view.setClickable(isChildClickable);
             addView(view);
+        }
+    }
+
+    public void removeAllFocus() {
+        if (childViewList != null) {
+            for (View view : childViewList) {
+                view.setFocusable(false);
+            }
+            isChildFocusable = false;
+        }
+    }
+
+    public void removeAllClick() {
+        if (childViewList != null) {
+            for (View view : childViewList) {
+                view.setClickable(false);
+            }
+            isChildClickable = true;
         }
     }
 
