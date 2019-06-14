@@ -1,18 +1,28 @@
 package com.example.du.customlayoutdemo.custom;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.AttributeSet;
+import android.graphics.Bitmap;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
+import com.example.du.customlayoutdemo.R;
 
 import java.util.List;
 
-public class NewTVCustomLayout extends FrameLayout {
+public class NewTVCustomLayout extends LinearLayout {
+    private static final String MODULE_TITLE_TEXT = "module_title_text";
+    private static final String MODULE_TITLE_IMAGE = "module_title_image";
     private Context mContext;
+    private TextView mTitleText;
+    private ImageView mTitleImage;
+    private FrameLayout mContentView;
     private List<View> mChildViewList;
     private boolean isChildFocusable = true;
     private boolean isChildClickable = true;
@@ -20,18 +30,8 @@ public class NewTVCustomLayout extends FrameLayout {
     public NewTVCustomLayout(@NonNull Context context) {
         super(context);
         this.mContext = context;
-    }
-
-    public NewTVCustomLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public NewTVCustomLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
-    public NewTVCustomLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        initView();
+        setTag();
     }
 
     public void setChildFocusable(boolean childFocusable) {
@@ -50,12 +50,28 @@ public class NewTVCustomLayout extends FrameLayout {
         return isChildClickable;
     }
 
+    public void setTitle(String title) {
+        mTitleImage.setVisibility(View.GONE);
+        mTitleText.setVisibility(View.VISIBLE);
+        mTitleText.setText(title);
+    }
+
+    public void setTitle(Bitmap bitmap) {
+        mTitleText.setVisibility(View.GONE);
+        mTitleImage.setVisibility(View.VISIBLE);
+        mTitleImage.setImageBitmap(bitmap);
+    }
+
+    public ViewGroup getContentView() {
+        return mContentView;
+    }
+
     public void addViewList(List<View> views) {
         mChildViewList = views;
         for (View view : views) {
             view.setFocusable(isChildFocusable);
             view.setClickable(isChildClickable);
-            addView(view);
+            mContentView.addView(view);
         }
     }
 
@@ -75,6 +91,33 @@ public class NewTVCustomLayout extends FrameLayout {
             }
             isChildClickable = true;
         }
+    }
+
+    public void setLayoutParams(LayoutParams layoutParams) {
+        mContentView.setLayoutParams(layoutParams);
+    }
+
+    private void initView() {
+        setOrientation(VERTICAL);
+        if (mTitleText == null) {
+            mTitleText = new TextView(mContext);
+            mTitleText.setTextColor(mContext.getResources().getColor(R.color.colorBlack));
+            mTitleText.setTextSize(35);
+            addView(mTitleText);
+        }
+        if (mTitleImage == null) {
+            mTitleImage = new ImageView(mContext);
+            addView(mTitleImage);
+        }
+        if (mContentView == null) {
+            mContentView = new FrameLayout(mContext);
+            addView(mContentView);
+        }
+    }
+
+    private void setTag() {
+        mTitleText.setTag(MODULE_TITLE_TEXT);
+        mTitleImage.setTag(MODULE_TITLE_IMAGE);
     }
 
     public static class LayoutParams extends FrameLayout.LayoutParams {
