@@ -1,6 +1,5 @@
 package com.example.du.customlayoutdemo.custom;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
